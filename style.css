@@ -89,3 +89,9 @@ main {
 .day-number {
   display: block;
 }
+
+.svg-box{
+  margin-top:14px;
+  min-width:36px;
+  min-height:36px;
+}
