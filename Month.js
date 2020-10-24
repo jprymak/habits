@@ -1,10 +1,14 @@
+import Day from "./day.js";
+
 const currentDate = new Date();
-const habitStartedDate = new Date(2020, 9, 1);
+
 class Month {
   constructor(monthNumber) {
     this.monthNumber = monthNumber;
+    this.verifyMonth();
     this.name;
     this.days;
+    this.maintained = 0;
   }
 
   verifyMonth() {
@@ -63,50 +67,22 @@ class Month {
   }
 
   createContent() {
-    this.verifyMonth();
     let content = "";
+
     for (let i = 1; i <= this.days; i++) {
-      const date = new Date(2020, this.monthNumber, i);
-      content += `<div class='day'>
-        <p class='day__number'>${date.getDate()}</p>
-        <p class='day__name'>${checkDayName(date.getDay())}</p>
-        <button class="habit-status ${
-          date > currentDate || date < habitStartedDate
-            ? "habit-status--disabled"
-            : ""
-        }" ${
-        date > currentDate || date < habitStartedDate ? "disabled" : ""
-      }></button></div>`;
+      content += new Day(this.monthNumber, i).createContent();
     }
+
     const month = document.createElement("div");
     month.classList.add("month");
     month.innerHTML = `
       <div class="month__info">
      <span class="month__name">${this.name}</span>
-     <span class="month__habits">0/${this.days}</span>
+     <span class="month__habits">${this.maintained}/${this.days}</span>
      </div>
      <div class='month__days'>${content}</div>
       `;
     return month;
-  }
-}
-
-function checkDayName(day) {
-  switch (day) {
-    case 0:
-      return "nd";
-    case 1:
-      return "pon";
-    case 2:
-      return "wt";
-    case 3:
-      return "śr";
-    case 4:
-      return "czw";
-    case 5:
-      return "pt";
-    case 6:
-      return "sob";
   }
 }
 
