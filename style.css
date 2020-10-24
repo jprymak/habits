@@ -80,10 +80,23 @@ main {
 }
 
 .habit-status {
+  cursor:pointer;
   width: 28px;
   height: 28px;
   border-radius: 50%;
+  background-color: rgb(112, 110, 110);
+}
+
+.habit-status--maintained {
   background-color: rgb(82, 196, 82);
+}
+
+.habit-status--broken {
+  background-color: rgb(255, 1, 1);
+}
+
+.habit-status--disabled {
+  background-color: rgb(229, 226, 226);
 }
 
 .day-number {
