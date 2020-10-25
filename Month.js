@@ -93,5 +93,5 @@ class Month {
     }
   }
 }
-console.log(new Month(0))
+
 export { Month, currentDate };
