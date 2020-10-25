@@ -8,6 +8,8 @@ class Month {
     this.verifyMonth();
     this.name;
     this.daysLength;
+    this.days=[];
+    this.createDays();
     this.maintained = 0;
   }
 
@@ -69,9 +71,9 @@ class Month {
   createContent() {
     let content = "";
 
-    for (let i = 1; i <= this.daysLength; i++) {
-      content += new Day(this.monthNumber, i).createContent();
-    }
+    this.days.forEach(day=>{
+      content +=day.createContent()
+    })
 
     const month = document.createElement("div");
     month.classList.add("month");
@@ -84,6 +86,12 @@ class Month {
       `;
     return month;
   }
-}
 
+  createDays(){
+    for(let i=1;i<=this.daysLength;i++){
+      this.days.push(new Day(this.monthNumber, i))
+    }
+  }
+}
+console.log(new Month(0))
 export { Month, currentDate };
