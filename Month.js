@@ -82,7 +82,7 @@ class Month {
      <span class="month__name">${this.name}</span>
      <span class="month__habits">${this.maintained}/${this.daysLength}</span>
      </div>
-     <div class='month__daysLength'>${content}</div>
+     <div class='month__days'>${content}</div>
       `;
     return month;
   }
