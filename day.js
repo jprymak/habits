@@ -17,7 +17,7 @@ class Day {
         <button class="habit-status ${
           date > currentDate || date < habitStartedDate
             ? "habit-status--disabled"
-            : (this.maintained===true ? "habit-status--maintained" : "")
+            : (this.maintained===true ? "habit-status--maintained" : "habit-status--broken")
         }" ${
       date > currentDate || date < habitStartedDate ? "disabled" : ""
     }></button></div>  
