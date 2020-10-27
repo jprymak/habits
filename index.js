@@ -1,16 +1,27 @@
 // Import stylesheets
 import "./style.css";
-import { currentDate } from "./Month.js";
+import {Month, currentDate } from "./Month.js";
+
 import months from "./months.js";
+import AppStorage from "./app-storage";
+import HabitsRepository from "./habits-repository";
 // Write Javascript code!
+
+const storage = new AppStorage();
+const repository = new HabitsRepository(storage, months);
+
 const currentMonth = currentDate.getMonth();
 
 const calendar = document.querySelector(".calendar");
 const nextButton = document.querySelector(".nextBtn");
 const previousButton = document.querySelector(".previousBtn");
 
+repository.getAll(months)
+
 for (let i = 0; i <= 11; i++) {
-  calendar.appendChild(months[i].createContent());
+  const {name, days, maintained, daysLength} = repository.months[i];
+  
+  calendar.appendChild(new Month(i, name, days, maintained, daysLength).createContent());
 }
 
 const calendarMonths = Array.from(document.querySelectorAll(".month"));
@@ -39,25 +50,26 @@ habitStatus.forEach((status) =>
     const monthIndex = calendarMonths.indexOf(monthToUpdate);
     const daysList = Array.from(monthToUpdate.querySelectorAll(".day"));
     const dayIndex = daysList.indexOf(currentDay);
-
+    console.log(repository.months)
     if (e.currentTarget.classList.contains("habit-status--broken")) {
       e.currentTarget.classList.remove("habit-status--broken");
       e.currentTarget.classList.add("habit-status--maintained");
-      months[monthIndex].days[dayIndex].maintained = true;
+      repository.months[monthIndex].days[dayIndex].maintained = true;
     } else {
       e.currentTarget.classList.remove("habit-status--maintained");
       e.currentTarget.classList.add("habit-status--broken");
-      months[monthIndex].days[dayIndex].maintained = false;
+      repository.months[monthIndex].days[dayIndex].maintained = false;
     }
-    const habitMaintainedCount = months[monthIndex].days.reduce((maintainedCount, day) => {
+    const habitMaintainedCount = repository.months[monthIndex].days.reduce((maintainedCount, day) => {
       if (day.maintained !== false) {
         maintainedCount += 1;
       }
 
       return maintainedCount;
     }, 0);
-
-    habitsStateToUpdate.innerHTML = `${habitMaintainedCount}/${months[monthIndex].daysLength}`;
+    repository.months[monthIndex].maintained = habitMaintainedCount;
+    habitsStateToUpdate.innerHTML = `${habitMaintainedCount}/${repository.months[monthIndex].daysLength}`;
+    repository.onChange();
   })
 );
 

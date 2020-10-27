@@ -3,14 +3,14 @@ import Day from "./day.js";
 const currentDate = new Date();
 
 class Month {
-  constructor(monthNumber) {
+  constructor(monthNumber, name, days, maintained, daysLength) {
     this.monthNumber = monthNumber;
+    this.name = name;
+    this.daysLength = daysLength;
     this.verifyMonth();
-    this.name;
-    this.daysLength;
-    this.days=[];
-    this.createDays();
-    this.maintained = 0;
+    this.days = days || this.createDays();
+
+    this.maintained = maintained || 0;
   }
 
   verifyMonth() {
@@ -71,9 +71,13 @@ class Month {
   createContent() {
     let content = "";
 
-    this.days.forEach(day=>{
-      content +=day.createContent()
-    })
+    this.days.forEach((day) => {
+      content += new Day(
+        this.monthNumber,
+        day.dayNumber,
+        day.maintained
+      ).createContent();
+    });
 
     const month = document.createElement("div");
     month.classList.add("month");
@@ -87,11 +91,13 @@ class Month {
     return month;
   }
 
-  createDays(){
-    for(let i=1;i<=this.daysLength;i++){
-      this.days.push(new Day(this.monthNumber, i))
+  createDays() {
+    const createdDays = [];
+    for (let i = 1; i <= this.daysLength; i++) {
+      createdDays.push(new Day(this.monthNumber, i));
     }
+    return createdDays;
   }
 }
-
+console.log(new Month(0))
 export { Month, currentDate };
