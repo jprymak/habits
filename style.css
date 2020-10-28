@@ -108,3 +108,11 @@ main {
   min-width:36px;
   min-height:36px;
 }
+
+.habit-picker__input{
+  margin-right: 8px;
+}
+
+.habit-picker__select{
+  min-width: 200px;
+}
