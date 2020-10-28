@@ -9,7 +9,6 @@ class Month {
     this.daysLength = daysLength;
     this.verifyMonth();
     this.days = days || this.createDays();
-
     this.maintained = maintained || 0;
   }
 
@@ -99,5 +98,5 @@ class Month {
     return createdDays;
   }
 }
-console.log(new Month(0))
+
 export { Month, currentDate };

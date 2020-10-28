@@ -12,17 +12,14 @@ const repository = new HabitsRepository(storage, months);
 
 const currentMonth = currentDate.getMonth();
 
-const calendar = document.querySelector(".calendar");
+
+
+
+
 const nextButton = document.querySelector(".nextBtn");
 const previousButton = document.querySelector(".previousBtn");
 
-repository.getAll(months)
-
-for (let i = 0; i <= 11; i++) {
-  const {name, days, maintained, daysLength} = repository.months[i];
-  
-  calendar.appendChild(new Month(i, name, days, maintained, daysLength).createContent());
-}
+repository.render()
 
 const calendarMonths = Array.from(document.querySelectorAll(".month"));
 
@@ -50,7 +47,7 @@ habitStatus.forEach((status) =>
     const monthIndex = calendarMonths.indexOf(monthToUpdate);
     const daysList = Array.from(monthToUpdate.querySelectorAll(".day"));
     const dayIndex = daysList.indexOf(currentDay);
-    console.log(repository.months)
+    
     if (e.currentTarget.classList.contains("habit-status--broken")) {
       e.currentTarget.classList.remove("habit-status--broken");
       e.currentTarget.classList.add("habit-status--maintained");
