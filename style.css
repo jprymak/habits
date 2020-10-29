@@ -53,6 +53,10 @@ main {
   display: flex;
 }
 
+.calendar-container--hidden {
+  display: none;
+}
+
 .month {
   display: none;
   margin: 8px;

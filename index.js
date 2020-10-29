@@ -1,95 +1,134 @@
 // Import stylesheets
 import "./style.css";
-import {Month, currentDate } from "./Month.js";
+
+import { currentDate } from "./Month.js";
 
 import months from "./months.js";
 import AppStorage from "./app-storage";
 import HabitsRepository from "./habits-repository";
 // Write Javascript code!
-
 const storage = new AppStorage();
 const repository = new HabitsRepository(storage, months);
-
 const currentMonth = currentDate.getMonth();
 
+const habitSelect = document.querySelector('.habit-picker__select');
+
+repository.updateOptions(repository.habits);
 
 
+const habitInput = document.querySelector(".habit-picker__input");
+const selectedHabit = document.querySelector(".habit-picker__select");
+const calendarContainer = document.querySelector(".calendar-container");
+const calendar = document.querySelector(".calendar");
+const habitConfirmBtn = document.querySelector(".habit-picker__button");
+let chosenHabitName='';
+calendarContainer.classList.add('calendar-container--hidden')
 
-
-const nextButton = document.querySelector(".nextBtn");
-const previousButton = document.querySelector(".previousBtn");
-
-repository.render()
-
-const calendarMonths = Array.from(document.querySelectorAll(".month"));
-
-calendarMonths.forEach((month, index) => {
-  if (
-    index === currentMonth - 1 ||
-    index === currentMonth ||
-    index === currentMonth + 1
-  ) {
-    month.classList.add("month--displayed");
+habitConfirmBtn.addEventListener("click", () => {
+  
+  if (habitInput.value !== "" && searchForName(habitInput.value)!==true) {
+    repository.createNewHabit(habitInput.value);
+    habitInput.value = "";
   }
 });
 
-nextButton.addEventListener("click", displayNextMonth);
-previousButton.addEventListener("click", displayPreviousMonth);
+habitSelect.addEventListener('change',()=>{
+calendar.innerHTML='';
+chosenHabitName=selectedHabit.value;
+repository.render(chosenHabitName);
+applyInteraction()
+})
 
-let visibleMonths = document.querySelectorAll(".month--displayed");
-const habitStatus = document.querySelectorAll(".habit-status");
 
-habitStatus.forEach((status) =>
-  status.addEventListener("click", (e) => {
-    const monthToUpdate = e.currentTarget.closest(".month");
-    const habitsStateToUpdate = monthToUpdate.querySelector(".month__habits");
-    const currentDay = e.currentTarget.closest(".day");
-    const monthIndex = calendarMonths.indexOf(monthToUpdate);
-    const daysList = Array.from(monthToUpdate.querySelectorAll(".day"));
-    const dayIndex = daysList.indexOf(currentDay);
-    
-    if (e.currentTarget.classList.contains("habit-status--broken")) {
-      e.currentTarget.classList.remove("habit-status--broken");
-      e.currentTarget.classList.add("habit-status--maintained");
-      repository.months[monthIndex].days[dayIndex].maintained = true;
-    } else {
-      e.currentTarget.classList.remove("habit-status--maintained");
-      e.currentTarget.classList.add("habit-status--broken");
-      repository.months[monthIndex].days[dayIndex].maintained = false;
+function applyInteraction(){
+  const nextButton = document.querySelector(".nextBtn");
+  const previousButton = document.querySelector(".previousBtn");
+  const calendarMonths = Array.from(document.querySelectorAll(".month"));
+
+  calendarMonths.forEach((month, index) => {
+    if (
+      index === currentMonth - 1 ||
+      index === currentMonth ||
+      index === currentMonth + 1
+    ) {
+      month.classList.add("month--displayed");
     }
-    const habitMaintainedCount = repository.months[monthIndex].days.reduce((maintainedCount, day) => {
-      if (day.maintained !== false) {
-        maintainedCount += 1;
+  });
+  
+  nextButton.addEventListener("click", displayNextMonth);
+  previousButton.addEventListener("click", displayPreviousMonth);
+  
+  let visibleMonths = document.querySelectorAll(".month--displayed");
+  const habitStatus = document.querySelectorAll(".habit-status");
+  
+  habitStatus.forEach((status) =>
+    status.addEventListener("click", (e) => {
+      const monthToUpdate = e.currentTarget.closest(".month");
+      const habitsStateToUpdate = monthToUpdate.querySelector(".month__habits");
+      const currentDay = e.currentTarget.closest(".day");
+      const monthIndex = calendarMonths.indexOf(monthToUpdate);
+      const daysList = Array.from(monthToUpdate.querySelectorAll(".day"));
+      const dayIndex = daysList.indexOf(currentDay);
+  
+      if (e.currentTarget.classList.contains("habit-status--broken")) {
+        e.currentTarget.classList.remove("habit-status--broken");
+        e.currentTarget.classList.add("habit-status--maintained");
+        repository.currentHabit.calendar[monthIndex].days[dayIndex].maintained = true;
+      } else {
+        e.currentTarget.classList.remove("habit-status--maintained");
+        e.currentTarget.classList.add("habit-status--broken");
+        repository.currentHabit.calendar[monthIndex].days[dayIndex].maintained = false;
       }
-
-      return maintainedCount;
-    }, 0);
-    repository.months[monthIndex].maintained = habitMaintainedCount;
-    habitsStateToUpdate.innerHTML = `${habitMaintainedCount}/${repository.months[monthIndex].daysLength}`;
-    repository.onChange();
-  })
-);
-
-function displayNextMonth() {
-  if (visibleMonths[2].querySelector(".month__name").innerHTML === "Grudzień")
-    return;
-  visibleMonths[0].classList.remove("month--displayed");
-
-  if (visibleMonths[2].nextElementSibling) {
-    visibleMonths[2].nextElementSibling.classList.add("month--displayed");
+      const habitMaintainedCount = repository.currentHabit.calendar[monthIndex].days.reduce(
+        (maintainedCount, day) => {
+          if (day.maintained !== false) {
+            maintainedCount += 1;
+          }
+  
+          return maintainedCount;
+        },
+        0
+      );
+      repository.currentHabit.calendar[monthIndex].maintained = habitMaintainedCount;
+      habitsStateToUpdate.innerHTML = `${habitMaintainedCount}/${repository.currentHabit.calendar[monthIndex].daysLength}`;
+      repository.onChange();
+    })
+  );
+  
+  function displayNextMonth() {
+    if (visibleMonths[2].querySelector(".month__name").innerHTML === "Grudzień")
+      return;
+    visibleMonths[0].classList.remove("month--displayed");
+  
+    if (visibleMonths[2].nextElementSibling) {
+      visibleMonths[2].nextElementSibling.classList.add("month--displayed");
+    }
+  
+    visibleMonths = document.querySelectorAll(".month--displayed");
   }
-
-  visibleMonths = document.querySelectorAll(".month--displayed");
+  
+  function displayPreviousMonth() {
+    if (visibleMonths[0].querySelector(".month__name").innerHTML === "Styczeń")
+      return;
+    visibleMonths[2].classList.remove("month--displayed");
+  
+    if (visibleMonths[0].previousElementSibling) {
+      visibleMonths[0].previousElementSibling.classList.add("month--displayed");
+    }
+  
+    visibleMonths = document.querySelectorAll(".month--displayed");
+  }
 }
 
-function displayPreviousMonth() {
-  if (visibleMonths[0].querySelector(".month__name").innerHTML === "Styczeń")
-    return;
-  visibleMonths[2].classList.remove("month--displayed");
-
-  if (visibleMonths[0].previousElementSibling) {
-    visibleMonths[0].previousElementSibling.classList.add("month--displayed");
+function searchForName(value){
+  let isNameTaken = false
+  let i=0;
+  while(i<repository.habits.length){
+    if(value===repository.habits[i].name){
+      isNameTaken = true;
+      break;
+    } 
+    i++
   }
-
-  visibleMonths = document.querySelectorAll(".month--displayed");
+  return isNameTaken;
 }
