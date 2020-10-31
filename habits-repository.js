@@ -1,7 +1,7 @@
 import { Month } from "./Month";
 import { v4 as uuidv4 } from 'uuid';
 class HabitsRepository {
-  constructor(storage, months) {
+  constructor(storage) {
     this.habits = storage.get("HABITS") || [];
     this.storage = storage;
     this.currentHabit = null;
@@ -26,10 +26,11 @@ class HabitsRepository {
       }
       
     }
-    console.log(this.currentHabit)
+    const habitHeader = document.querySelector('.habit-header');
     const calendarContainer = document.querySelector(".calendar-container");
     const calendar = document.querySelector(".calendar");
 
+    habitHeader.innerHTML = this.currentHabit.name;
     calendarContainer.classList.remove('calendar-container--hidden')
 
     for (let i = 0; i <= 11; i++) {
