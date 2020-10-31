@@ -28,16 +28,23 @@ habitConfirmBtn.addEventListener("click", () => {
   
   if (habitInput.value !== "" && searchForName(habitInput.value)!==true) {
     repository.createNewHabit(habitInput.value);
-    habitInput.value = "";
+    calendar.innerHTML='';
+  chosenHabitName=habitInput.value;
+  repository.render(chosenHabitName);
+  applyInteraction();
+  repository.onChange();
+  habitSelect.value=repository.currentHabit.name;
   }
+  habitInput.value = "";
 });
 
-habitSelect.addEventListener('change',()=>{
-calendar.innerHTML='';
-chosenHabitName=selectedHabit.value;
-repository.render(chosenHabitName);
+if(repository.currentHabit!==null){
+habitSelect.value=repository.currentHabit.name;
+repository.render(repository.currentHabit.name);
 applyInteraction()
-})
+}
+
+habitSelect.addEventListener('change',onChosenHabit)
 
 
 function applyInteraction(){
@@ -131,4 +138,12 @@ function searchForName(value){
     i++
   }
   return isNameTaken;
+}
+
+function onChosenHabit(){
+  calendar.innerHTML='';
+  chosenHabitName=selectedHabit.value;
+  repository.render(chosenHabitName);
+  applyInteraction();
+  repository.onChange();
 }
