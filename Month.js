@@ -3,13 +3,15 @@ import Day from "./day.js";
 const currentDate = new Date();
 
 class Month {
-  constructor(monthNumber, name, days, maintained, daysLength) {
+  constructor(monthNumber, name, days, maintained, daysLength, startingDate) {
     this.monthNumber = monthNumber;
     this.name = name;
     this.daysLength = daysLength;
     this.verifyMonth();
     this.days = days || this.createDays();
     this.maintained = maintained || 0;
+    this.startingDate = startingDate;
+    
   }
 
   verifyMonth() {
@@ -74,7 +76,8 @@ class Month {
       content += new Day(
         this.monthNumber,
         day.dayNumber,
-        day.maintained
+        this.startingDate,
+        day.maintained,
       ).createContent();
     });
 
@@ -91,9 +94,10 @@ class Month {
   }
 
   createDays() {
+    
     const createdDays = [];
     for (let i = 1; i <= this.daysLength; i++) {
-      createdDays.push(new Day(this.monthNumber, i));
+      createdDays.push(new Day(this.monthNumber, i, this.startingDate));
     }
     return createdDays;
   }

@@ -2,24 +2,25 @@ const currentDate = new Date();
 const habitStartedDate = new Date(2020, 9, 1);
 
 class Day {
-  constructor(monthNumber, number, maintained) {
+  constructor(monthNumber, number, startingDate, maintained) {
     this.dayNumber = number;
     this.monthNumber = monthNumber;
     this.maintained = maintained || false;
+    this.startingDate = startingDate;
   }
   createContent() {
     const date = new Date(2020, this.monthNumber, this.dayNumber);
-
+    
     return `
         <div class="day">
         <p class='day__number'>${date.getDate()}</p>
         <p class='day__name'>${checkDayName(date.getDay())}</p>
         <button class="habit-status ${
-          date > currentDate || date < habitStartedDate
+          date > currentDate || date < this.startingDate
             ? "habit-status--disabled"
             : (this.maintained===true ? "habit-status--maintained" : "habit-status--broken")
         }" ${
-      date > currentDate || date < habitStartedDate ? "disabled" : ""
+      date > currentDate || date < this.startingDate ? "disabled" : ""
     }></button></div>  
         `;
   }

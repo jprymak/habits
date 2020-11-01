@@ -17,6 +17,7 @@ repository.updateOptions(repository.habits);
 
 
 const habitInput = document.querySelector(".habit-picker__input");
+const habitStartedDate = document.querySelector('.habit-picker__date');
 const selectedHabit = document.querySelector(".habit-picker__select");
 const calendarContainer = document.querySelector(".calendar-container");
 const calendar = document.querySelector(".calendar");
@@ -26,8 +27,8 @@ calendarContainer.classList.add('calendar-container--hidden')
 
 habitConfirmBtn.addEventListener("click", () => {
   
-  if (habitInput.value !== "" && searchForName(habitInput.value)!==true) {
-    repository.createNewHabit(habitInput.value);
+  if (habitInput.value !== "" && searchForName(habitInput.value)!==true && habitStartedDate.value !== "") {
+    repository.createNewHabit(habitInput.value, habitStartedDate.valueAsDate);
     calendar.innerHTML='';
   chosenHabitName=habitInput.value;
   repository.render(chosenHabitName);

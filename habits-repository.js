@@ -7,13 +7,15 @@ class HabitsRepository {
     this.currentHabit = storage.get("RECENT") || null;
   }
 
-  createNewHabit(name) {
+  createNewHabit(name, dateString) {
     const calendar = [];
+    const startingDate = new Date(dateString);
+    
     const id = uuidv4();
     for (let i = 0; i <= 11; i++) {
       calendar.push(new Month(i));
     }
-    const newHabit = { id, name, calendar };
+    const newHabit = { id, name, calendar, startingDate };
     this.habits.push(newHabit);
     this.updateOptions(this.habits);
   }
@@ -36,12 +38,12 @@ class HabitsRepository {
     calendarContainer.classList.remove("calendar-container--hidden");
 
     for (let i = 0; i <= 11; i++) {
-      const { name, days, maintained, daysLength } = this.currentHabit.calendar[
+      const { name, days, maintained, daysLength} = this.currentHabit.calendar[
         i
       ];
-
+      
       calendar.appendChild(
-        new Month(i, name, days, maintained, daysLength).createContent()
+        new Month(i, name, days, maintained, daysLength, new Date(this.currentHabit.startingDate)).createContent()
       );
     }
   }
