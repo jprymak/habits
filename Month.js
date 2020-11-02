@@ -1,7 +1,5 @@
 import Day from "./day.js";
 
-const currentDate = new Date();
-
 class Month {
   constructor(monthNumber, name, days, maintained, daysLength, startingDate) {
     this.monthNumber = monthNumber;
@@ -103,4 +101,4 @@ class Month {
   }
 }
 
-export { Month, currentDate };
+export { Month};
