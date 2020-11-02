@@ -7,6 +7,7 @@ import HabitsRepository from "./habits-repository";
 
 const storage = new AppStorage();
 const repository = new HabitsRepository(storage, months);
+const currentDate = new Date();
 const currentMonth = new Date().getMonth();
 
 const habitSelect = document.querySelector(".habit-picker__select");
@@ -23,12 +24,14 @@ let chosenHabitName = "";
 calendarContainer.classList.add("calendar-container--hidden");
 
 habitConfirmBtn.addEventListener("click", () => {
+  const chosenDate = new Date(habitStartedDate.valueAsDate)
   if (
     habitInput.value !== "" &&
     searchForName(habitInput.value) !== true &&
-    habitStartedDate.value !== ""
+    habitStartedDate.value !== "" &&
+    chosenDate<=currentDate
   ) {
-    repository.createNewHabit(habitInput.value, habitStartedDate.valueAsDate);
+    repository.createNewHabit(habitInput.value, chosenDate);
     calendar.innerHTML = "";
     chosenHabitName = habitInput.value;
     repository.render(chosenHabitName);

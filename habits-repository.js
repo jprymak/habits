@@ -7,9 +7,8 @@ class HabitsRepository {
     this.currentHabit = storage.get("RECENT") || null;
   }
 
-  createNewHabit(name, dateString) {
+  createNewHabit(name, startingDate) {
     const calendar = [];
-    const startingDate = new Date(dateString);
     startingDate.setHours(0)
     startingDate.setMinutes(0)
     startingDate.setSeconds(0)   
