@@ -1,5 +1,7 @@
 const currentDate = new Date();
-const habitStartedDate = new Date(2020, 9, 1);
+currentDate.setHours(0)
+currentDate.setMinutes(0)
+currentDate.setSeconds(0)
 
 class Day {
   constructor(monthNumber, number, startingDate, maintained) {

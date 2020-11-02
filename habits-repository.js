@@ -10,7 +10,9 @@ class HabitsRepository {
   createNewHabit(name, dateString) {
     const calendar = [];
     const startingDate = new Date(dateString);
-    
+    startingDate.setHours(0)
+    startingDate.setMinutes(0)
+    startingDate.setSeconds(0)   
     const id = uuidv4();
     for (let i = 0; i <= 11; i++) {
       calendar.push(new Month(i));
